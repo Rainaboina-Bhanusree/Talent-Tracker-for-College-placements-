@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Talent Tracker Pro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+      color: #333;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      text-align: center;
+      padding: 1.2rem;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #fff;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    nav button {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: bold;
+    }
+
+    nav button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(245,87,108,0.6);
+    }
+
+    section {
+      display: none;
+      padding: 2rem;
+      animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .active {
+      display: block;
+    }
+
+    .form-container, .job-card, .leaderboard {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #6a11cb;
+      margin-bottom: 1rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #56CCF2, #2F80ED);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .btn-save:hover {
+      background: linear-gradient(135deg, #2F80ED, #56CCF2);
+    }
+
+    .student-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 10px auto;
+      border: 3px solid #f5576c;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      color: #333;
+      padding: 10px 20px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<header>🎓 Talent Tracker For College</header>
+
+<nav>
+  <button onclick="showSection('home')">Home</button>
+  <button onclick="showSection('student')">Student Details</button>
+  <button onclick="showSection('jobs')">Job Roles</button>
+  <button onclick="showSection('leaderboard')">Leaderboard</button>
+  <button onclick="showSection('about')">About</button>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="active">
+  <h2>Welcome to Talent Tracker for College</h2>
+  <p style="text-align:center;">Empowering College Placements with Smart Student Tracking 🚀</p>
+</section>
+
+<!-- STUDENT DETAILS -->
+<section id="student">
+  <h2>Student Resume Details</h2>
+  <div class="form-container">
+    <input type="file" id="photoInput" accept="image/*" onchange="previewPhoto(event)">
+    <img id="previewImg" class="student-photo" src="" alt="Profile Photo">
+
+    <h3>Personal Details</h3>
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="studentId" placeholder="Student ID">
+    <input type="email" id="email" placeholder="Email ID">
+    <input type="tel" id="contact" placeholder="Contact Number">
+
+    <h3>Academic Details</h3>
+    <input type="text" id="branch" placeholder="Branch">
+    <input type="number" id="cgpa" placeholder="CGPA" step="0.01">
+    <select id="backlogs">
+      <option value="">Backlogs?</option>
+      <option value="No">No</option>
+      <option value="Yes">Yes</option>
+    </select>
+    <input type="number" id="year" placeholder="Year of Passing">
+
+    <h3>Education Details</h3>
+    <input type="text" id="education" placeholder="Highest Qualification">
+    <input type="text" id="college" placeholder="College/University Name">
+
+    <h3>Skills</h3>
+    <input type="text" id="skills" placeholder="e.g., Java, Python, ML">
+
+    <h3>Experience</h3>
+    <textarea id="experience" placeholder="Internships or Projects"></textarea>
+
+    <h3>Career Objective</h3>
+    <textarea id="objective" placeholder="Your short career goal..."></textarea>
+
+    <button class="btn-save" onclick="saveStudent()">Save Student</button>
+  </div>
+</section>
+
+<!-- JOB ROLES -->
+<section id="jobs">
+  <h2>Available Job Roles</h2>
+  <div id="jobList" class="job-card"></div>
+</section>
+
+<!-- LEADERBOARD -->
+<section id="leaderboard">
+  <h2>Leaderboard (Sorted by CGPA)</h2>
+  <div id="leaderboardList" class="leaderboard"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2>About Talent Tracker Pro</h2>
+  <div class="form-container">
+    <p>
+      Talent Tracker Pro is designed to help placement officers efficiently match students to job roles 
+      based on skills, CGPA, and eligibility. It eliminates manual sorting and speeds up recruitment 
+      processes, providing a centralized platform for managing student profiles, viewing leaderboards, 
+      and analyzing job eligibility.
+    </p>
+    <ul>
+      <li>💡 Smart eligibility filtering by CGPA and skills</li>
+      <li>⚡ Instantly identifies top students for each company</li>
+      <li>📊 Provides a clear leaderboard for recognition</li>
+      <li>🧠 Saves time and increases placement accuracy</li>
+    </ul>
+  </div>
+</section>
+
+<script>
+  const sections = document.querySelectorAll('section');
+  function showSection(id) {
+    sections.forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  let students = JSON.parse(localStorage.getItem('students')) || [];
+
+  function previewPhoto(event) {
+    const img = document.getElementById('previewImg');
+    img.src = URL.createObjectURL(event.target.files[0]);
+  }
+
+  function saveStudent() {
+    const student = {
+      photo: document.getElementById('previewImg').src,
+      name: name.value,
+      id: studentId.value,
+      email: email.value,
+      contact: contact.value,
+      branch: branch.value,
+      cgpa: parseFloat(cgpa.value),
+      backlogs: backlogs.value,
+      year: year.value,
+      education: education.value,
+      college: college.value,
+      skills: skills.value.toLowerCase().split(','),
+      experience: experience.value,
+      objective: objective.value
+    };
+    students.push(student);
+    localStorage.setItem('students', JSON.stringify(students));
+    alert("✅ Student saved successfully!");
+    displayJobs();
+    displayLeaderboard();
+  }
+
+  const jobRoles = [
+    { title: "Software Developer", lpa: 8, cutoff: 7.0, skills: ["java", "python"], description: "Develop scalable software solutions." },
+    { title: "Data Scientist", lpa: 10, cutoff: 8.0, skills: ["python", "ml", "data"], description: "Analyze data and build predictive models." },
+    { title: "Web Developer", lpa: 6, cutoff: 6.5, skills: ["html", "css", "javascript"], description: "Design and develop web apps." }
+  ];
+
+  function displayJobs() {
+    const jobList = document.getElementById('jobList');
+    jobList.innerHTML = "";
+    jobRoles.forEach(job => {
+      const eligible = students.filter(s =>
+        s.cgpa >= job.cutoff &&
+        job.skills.some(skill => s.skills.includes(skill))
+      );
+      jobList.innerHTML += `
+        <div style="margin-bottom:20px;">
+          <h3>${job.title} (${job.lpa} LPA)</h3>
+          <p><b>CGPA Cutoff:</b> ${job.cutoff}</p>
+          <p><b>Required Skills:</b> ${job.skills.join(', ')}</p>
+          <p><b>Description:</b> ${job.description}</p>
+          <p><b>Eligible Students:</b> ${eligible.length > 0 ? eligible.map(e => e.name).join(', ') : 'None'}</p>
+        </div>
+      `;
+    });
+  }
+
+  function displayLeaderboard() {
+    const leaderboardList = document.getElementById('leaderboardList');
+    const sorted = [...students].sort((a,b) => b.cgpa - a.cgpa);
+    leaderboardList.innerHTML = "";
+    sorted.forEach((s,i) => {
+      leaderboardList.innerHTML += `
+        <div class="leaderboard-item">
+          <span>🏅 Rank ${i+1} - ${s.name}</span>
+          <span>CGPA: ${s.cgpa}</span>
+        </div>`;
+    });
+  }
+
+  displayJobs();
+  displayLeaderboard();
+</script>
+</body>
+</html>
+
